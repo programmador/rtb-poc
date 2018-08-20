@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"github.com/bsm/openrtb"
 	"github.com/labstack/echo"
+	"xojoc.pw/useragent"
 )
 
 type Telemetry struct {
@@ -32,6 +33,8 @@ func getBidAction (c echo.Context) error {
 	}
 
 	t := new(Telemetry)
+
+	fillFromUA(t, req)
 	fillDomain(t, req)
 	t.State = "UA"
 
@@ -66,4 +69,20 @@ func getDomainFromUrl(urltext *string) string {
 		return ""
 	}
 	return u.Hostname()
+}
+
+func fillFromUA(t *Telemetry, req *openrtb.BidRequest) {
+	ua := getUserAgent(req)
+	if ua == nil {
+		return
+	}
+	fillOperatingSystem(t, ua)
+}
+
+func getUserAgent(req *openrtb.BidRequest) *useragent.UserAgent {
+	return useragent.Parse(req.Device.UA)
+}
+
+func fillOperatingSystem(t *Telemetry, ua *useragent.UserAgent) {
+	t.OS = ua.OS;
 }
