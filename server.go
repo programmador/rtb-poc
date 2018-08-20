@@ -101,13 +101,14 @@ func fillClient(t *Telemetry, ua *useragent.UserAgent) {
 }
 
 func fillClientType(t *Telemetry, ua *useragent.UserAgent) {
-    if ua.Mobile {
-        t.Device = "Mobile"
-    } else if ua.Tablet {
-        t.Device = "Tablet"
-    } else {
-        t.Device = "Desktop"
-    }
+	switch {
+		case ua.Mobile:
+			t.Device = "Mobile"
+		case  ua.Tablet:
+			t.Device = "Tablet"
+		default:
+			t.Device = "Desktop"
+	}
 }
 
 func fillState(t *Telemetry, req *openrtb.BidRequest) {
