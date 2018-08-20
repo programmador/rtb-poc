@@ -1,3 +1,19 @@
+## Installing dependencies
+
+```
+go get -u github.com/labstack/echo/...
+go get github.com/bsm/openrtb
+go get xojoc.pw/useragent
+```
+
+
+## Running
+
+```
+go run server.go
+```
+
+
 ## Testing
 
 ```
