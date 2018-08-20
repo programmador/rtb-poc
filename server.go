@@ -12,6 +12,14 @@ type User struct {
 	Email string `json:"email" xml:"email" form:"email" query:"email"`
 }
 
+type Telemetry struct {
+	OS		string	`json:"os,omitempty"`
+	Device	string	`json:"device,omitempty"`
+	Client	string	`json:"client,omitempty"`
+	State	string	`json:"state,omitempty"`
+	Domain	string	`json:"domain,omitempty"`
+}
+
 func main() {
 	e := echo.New()
 	e.GET("/", func(c echo.Context) error {
@@ -54,10 +62,15 @@ func getBid (c echo.Context) error {
 	  return err
 	}
 
+	t := new(Telemetry)
+	// @TODO 1) if "site" exists 2) if "domain not exists" - parse "page"
+	t.Domain = req.Site.Domain
+	t.State = "UA"
+
 	/**
-	  * We are returning a bid request though in a production project we have
-	  * to return a valid BidResponse
+	  * We are returning a Telemetry struct JSON-encoded response
+	  * though in a production project we have to return a valid BidResponse
 	  * @see RTB docs
 	 */
-	return c.JSON(http.StatusCreated, req)
+	return c.JSON(http.StatusCreated, t)
 }
