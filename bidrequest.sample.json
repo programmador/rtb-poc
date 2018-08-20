@@ -1,0 +1,60 @@
+{
+  "id": "WEcgigALZ28KT74DlAEKdA",
+  "imp": [
+    {
+      "id": "1",
+      "tagid": "3654083237",
+      "bidfloor": 0.75,
+      "bidfloorcur": "USD",
+      "native": {
+        "request": "{\"ver\":\"1.0\"...\"style_width\":300}}",
+        "ver": "1.0"
+      },
+      "ext": {
+        "billing_id": [
+          "1234567" ],
+        "publisher_settings_list_id": [
+          "17725875107190109537"],
+        "allowed_vendor_type": [
+          10,
+          42 ]
+      }
+    }
+  ],
+  "site": {
+    "page": "https://www.example.com/story/30139/common-reasons-of-breakups",
+    "publisher": {
+      "id": "1234"
+    },
+    "content": {
+      "language": "en"
+    },
+    "mobile": 1
+  },
+  "device": {
+    "ua": "Mozilla/5.0 (Linux; Android 6.0; Nexus 6P Build/MDA83) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.94 Mobile Safari/537.36",
+    "ip": "104.191.75.0",
+    "geo": {
+      "country": "USA",
+      "region": "US-TX",
+      "metro": "641",
+      "city": "San Antonio",
+      "zip": "78259",
+      "utcoffset": -360
+    },
+    "make": "apple",
+    "model": "iphone",
+    "os": "iOS",
+    "osv": "10.2",
+    "devicetype": 4,
+    "w": 375,
+    "h": 667,
+    "pxratio": 2
+  },
+  "user": {
+    "id": "CAESEI5Z85FbBUR-qiEz000000"
+  },
+  "cur": [
+    "USD"
+  ]
+}
