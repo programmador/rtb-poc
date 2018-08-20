@@ -49,7 +49,7 @@ func getUsers (c echo.Context) error {
 
 func getBid (c echo.Context) error {
 	var req *openrtb.BidRequest
-	err = json.NewDecoder(c.Request().Body).Decode(&req)
+	err := json.NewDecoder(c.Request().Body).Decode(&req)
 	if err != nil {
 	  return err
 	}
