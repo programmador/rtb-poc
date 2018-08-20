@@ -22,14 +22,14 @@ type Telemetry struct {
 }
 
 type GeoInfo struct {
-	IP  string `json:"ip" xml:"ip" form:"ip" query:"ip"`
-	Hostname  string `json:"hostname" xml:"hostname" form:"hostname" query:"hostname"`
-	City  string `json:"city" xml:"city" form:"city" query:"city"`
-	Region  string `json:"region" xml:"region" form:"region" query:"region"`
-	Country  string `json:"country" xml:"country" form:"country" query:"country"`
-	Location  string `json:"loc" xml:"loc" form:"loc" query:"loc"`
-	Postal  string `json:"postal" xml:"postal" form:"postal" query:"postal"`
-	Org  string `json:"org" xml:"org" form:"org" query:"org"`
+	IP  		string `json:"ip" xml:"ip" form:"ip" query:"ip"`
+	Hostname  	string `json:"hostname" xml:"hostname" form:"hostname" query:"hostname"`
+	City  		string `json:"city" xml:"city" form:"city" query:"city"`
+	Region  	string `json:"region" xml:"region" form:"region" query:"region"`
+	Country  	string `json:"country" xml:"country" form:"country" query:"country"`
+	Location  	string `json:"loc" xml:"loc" form:"loc" query:"loc"`
+	Postal  	string `json:"postal" xml:"postal" form:"postal" query:"postal"`
+	Org  		string `json:"org" xml:"org" form:"org" query:"org"`
 }
 
 func main() {
