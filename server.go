@@ -1,8 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"net/http"
-
+	"github.com/bsm/openrtb"
 	"github.com/labstack/echo"
 )
 
@@ -18,6 +19,7 @@ func main() {
 	})
 	e.POST("/users", getUsers)
 	e.GET("/users/:id", getUser)
+	e.POST("/get_bid", getBid)
 	e.Logger.Fatal(e.Start(":1323"))
 }
 
@@ -43,4 +45,19 @@ func getUsers (c echo.Context) error {
 	return c.JSON(http.StatusCreated, u)
 	// or
 	// return c.XML(http.StatusCreated, u)
+}
+
+func getBid (c echo.Context) error {
+	var req *openrtb.BidRequest
+	err = json.NewDecoder(c.Request().Body).Decode(&req)
+	if err != nil {
+	  return err
+	}
+
+	/**
+	  * We are returning a bid request though in a production project we have
+	  * to return a valid BidResponse
+	  * @see RTB docs
+	 */
+	return c.JSON(http.StatusCreated, req)
 }
