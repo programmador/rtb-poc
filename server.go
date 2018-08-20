@@ -78,6 +78,7 @@ func fillFromUA(t *Telemetry, req *openrtb.BidRequest) {
 	}
 	fillOperatingSystem(t, ua)
 	fillClient(t, ua)
+	fillClientType(t, ua)
 }
 
 func getUserAgent(req *openrtb.BidRequest) *useragent.UserAgent {
@@ -90,4 +91,14 @@ func fillOperatingSystem(t *Telemetry, ua *useragent.UserAgent) {
 
 func fillClient(t *Telemetry, ua *useragent.UserAgent) {
 	t.Client = ua.Name;
+}
+
+func fillClientType(t *Telemetry, ua *useragent.UserAgent) {
+    if ua.Mobile {
+        t.Device = "Mobile"
+    } else if ua.Tablet {
+        t.Device = "Tablet"
+    } else {
+        t.Device = "Desktop"
+    }
 }
