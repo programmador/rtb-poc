@@ -77,6 +77,7 @@ func fillFromUA(t *Telemetry, req *openrtb.BidRequest) {
 		return
 	}
 	fillOperatingSystem(t, ua)
+	fillClient(t, ua)
 }
 
 func getUserAgent(req *openrtb.BidRequest) *useragent.UserAgent {
@@ -85,4 +86,8 @@ func getUserAgent(req *openrtb.BidRequest) *useragent.UserAgent {
 
 func fillOperatingSystem(t *Telemetry, ua *useragent.UserAgent) {
 	t.OS = ua.OS;
+}
+
+func fillClient(t *Telemetry, ua *useragent.UserAgent) {
+	t.Client = ua.Name;
 }
