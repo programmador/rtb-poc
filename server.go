@@ -1,6 +1,9 @@
 package main
 
 import (
+	//"regexp"
+	//"log"
+	"net/url"
 	"encoding/json"
 	"net/http"
 	"github.com/bsm/openrtb"
@@ -29,8 +32,7 @@ func getBidAction (c echo.Context) error {
 	}
 
 	t := new(Telemetry)
-	// @TODO 1) if "site" exists 2) if "domain not exists" - parse "page"
-	t.Domain = req.Site.Domain
+	fillDomain(t, req)
 	t.State = "UA"
 
 	/**
@@ -39,4 +41,29 @@ func getBidAction (c echo.Context) error {
 	  * @see RTB docs
 	 */
 	return c.JSON(http.StatusCreated, t)
+}
+
+func fillDomain(t *Telemetry, req *openrtb.BidRequest) {
+	if req.Site == nil {
+		return
+	}
+	if len(req.Site.Domain) <= 0 {
+		t.Domain = getDomainFromUrl(&req.Site.Page)
+		return
+	}
+	t.Domain = req.Site.Domain
+}
+
+func getDomainFromUrl(urltext *string) string {
+	/*re := regexp.MustCompile(`^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/\n]+)`)
+	submatchall := re.FindAllString(*url,-1)
+	for _, element := range submatchall {
+		log.Printf("%+v\n", element)
+		//return element
+	}*/
+	u, err := url.Parse(*urltext)
+	if err != nil {
+		return ""
+	}
+	return u.Hostname()
 }
