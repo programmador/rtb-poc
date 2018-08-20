@@ -1,15 +1,14 @@
 package main
 
 import (
-	//"regexp"
-	"log"
-	"net/url"
 	"encoding/json"
-	"net/http"
 	"github.com/bsm/openrtb"
 	"github.com/labstack/echo"
-	"xojoc.pw/useragent"
 	"io/ioutil"
+	"log"
+	"net/http"
+	"net/url"
+	"xojoc.pw/useragent"
 )
 
 var GEO_SERVICE = "https://ipinfo.io/"
@@ -72,12 +71,6 @@ func fillDomain(t *Telemetry, req *openrtb.BidRequest) {
 }
 
 func getDomainFromUrl(urltext *string) string {
-	/*re := regexp.MustCompile(`^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/\n]+)`)
-	submatchall := re.FindAllString(*url,-1)
-	for _, element := range submatchall {
-		log.Printf("%+v\n", element)
-		//return element
-	}*/
 	u, err := url.Parse(*urltext)
 	if err != nil {
 		return ""
@@ -139,7 +132,7 @@ func getGeoIpInfo(req *openrtb.BidRequest) *GeoInfo {
 	if geoInfo == nil {
 		return nil
 	}
-	
+
 	return geoInfo
 }
 
