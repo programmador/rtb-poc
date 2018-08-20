@@ -2,14 +2,17 @@ package main
 
 import (
 	//"regexp"
-	//"log"
+	"log"
 	"net/url"
 	"encoding/json"
 	"net/http"
 	"github.com/bsm/openrtb"
 	"github.com/labstack/echo"
 	"xojoc.pw/useragent"
+	"io/ioutil"
 )
+
+var GEO_SERVICE = "https://ipinfo.io/"
 
 type Telemetry struct {
 	OS		string	`json:"os,omitempty"`
@@ -17,6 +20,17 @@ type Telemetry struct {
 	Client	string	`json:"client,omitempty"`
 	State	string	`json:"state,omitempty"`
 	Domain	string	`json:"domain,omitempty"`
+}
+
+type GeoInfo struct {
+	IP  string `json:"ip" xml:"ip" form:"ip" query:"ip"`
+	Hostname  string `json:"hostname" xml:"hostname" form:"hostname" query:"hostname"`
+	City  string `json:"city" xml:"city" form:"city" query:"city"`
+	Region  string `json:"region" xml:"region" form:"region" query:"region"`
+	Country  string `json:"country" xml:"country" form:"country" query:"country"`
+	Location  string `json:"loc" xml:"loc" form:"loc" query:"loc"`
+	Postal  string `json:"postal" xml:"postal" form:"postal" query:"postal"`
+	Org  string `json:"org" xml:"org" form:"org" query:"org"`
 }
 
 func main() {
@@ -36,7 +50,7 @@ func getBidAction (c echo.Context) error {
 
 	fillFromUA(t, req)
 	fillDomain(t, req)
-	t.State = "UA"
+	fillState(t, req)
 
 	/**
 	  * We are returning a Telemetry struct JSON-encoded response
@@ -101,4 +115,65 @@ func fillClientType(t *Telemetry, ua *useragent.UserAgent) {
     } else {
         t.Device = "Desktop"
     }
+}
+
+func fillState(t *Telemetry, req *openrtb.BidRequest) {
+	geoInfo := getGeoIpInfo(req)
+	if geoInfo != nil {
+		t.State = geoInfo.Country
+	}
+}
+
+func getGeoIpInfo(req *openrtb.BidRequest) *GeoInfo {
+	serviceUrl := getGeoServiceUrl(req.Device)
+	if len(serviceUrl) <= 0 {
+		return nil
+	}
+
+	body := getGeoResponse(&serviceUrl)
+	if body == nil {
+		return nil
+	}
+
+	geoInfo := parseGeoInfo(body)
+	if geoInfo == nil {
+		return nil
+	}
+	
+	return geoInfo
+}
+
+func getGeoResponse(url *string) []byte {
+	resp, err := http.Get(*url)
+	if err != nil {
+		log.Printf("%+v\n", "ERROR REQUESTING GEOIP INFO")
+		return nil
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	return body
+}
+
+func parseGeoInfo(body []byte) *GeoInfo {
+	geoInfo := new (GeoInfo)
+	if err := json.Unmarshal(body, &geoInfo); err != nil {
+		log.Printf("%+v\n", "ERROR PARSING GEOIP INFO")
+		return nil
+	}
+	return geoInfo
+}
+
+func getGeoServiceUrl(d *openrtb.Device) string {
+	switch {
+		case len(d.IP) > 0:
+			return getGeoServiceBaseUrl(&d.IP)
+		case len(d.IPv6) > 0:
+			return getGeoServiceBaseUrl(&d.IPv6)
+		default:
+			return ""
+	}
+}
+
+func getGeoServiceBaseUrl(IP *string) string {
+	return GEO_SERVICE + *IP
 }
